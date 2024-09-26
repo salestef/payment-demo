@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Payment Form</h1>
+    {{ form_start(form) }}
+    {{ form_row(form.amount) }}
+    {{ form_row(form.first_name) }}
+    {{ form_row(form.last_name) }}
+    {{ form_row(form.email) }}
+    {{ form_row(form.submit) }}
+    {{ form_end(form) }}
+{% endblock %}

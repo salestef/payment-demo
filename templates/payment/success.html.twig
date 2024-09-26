@@ -1,0 +1,8 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Payment Information</h1>
+    <p>Amount: {{ payment_info.amount }}</p>
+    <p>Currency: {{ payment_info.currency }}</p>
+    <img src="{{ payment_info.qr_code }}" alt="QR Code">
+{% endblock %}

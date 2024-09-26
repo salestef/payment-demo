@@ -7,40 +7,43 @@ namespace DoctrineMigrations;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
-/**
- * This migration adds tables for callback, invoice, and messenger messages.
- * - The `callback` table stores signal and info data.
- * - The `invoice` table keeps track of invoice statuses and QR codes.
- * - The `messenger_messages` table stores message queues, timestamps, and other metadata.
- */
 final class Version20240924171230 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Creates tables for callback, invoice, and messenger_messages with improved naming conventions for foreign keys and indices.';
+        return 'Creates tables for callback, invoice and messenger_messages.';
     }
 
     public function up(Schema $schema): void
     {
-        // Table for callback information
-        $this->addSql('CREATE TABLE callback (
-            id INT AUTO_INCREMENT NOT NULL, 
-            `signal` VARCHAR(255) DEFAULT NULL, 
-            info LONGTEXT DEFAULT NULL, 
-            PRIMARY KEY(id)
-        ) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
-
-        // Table for invoices
+        // Prvo kreiramo tabelu invoices
         $this->addSql('CREATE TABLE invoice (
             id INT AUTO_INCREMENT NOT NULL, 
             status VARCHAR(255) NOT NULL, 
             request_data LONGTEXT DEFAULT NULL, 
             response_data LONGTEXT DEFAULT NULL, 
             qr_code VARCHAR(255) DEFAULT NULL, 
+            amount DOUBLE PRECISION DEFAULT 0 NOT NULL,
             PRIMARY KEY(id)
         ) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
 
-        // Table for messenger messages with meaningful index names
+        // Sada kreiramo tabelu callback koja zavisi od tabele invoice
+        $this->addSql('CREATE TABLE callback (
+            id INT AUTO_INCREMENT NOT NULL, 
+            info LONGTEXT DEFAULT NULL, 
+            invoice_id INT NOT NULL, 
+            signature VARCHAR(255) NOT NULL, 
+            raw_data LONGTEXT NOT NULL, 
+            status VARCHAR(50) NOT NULL, 
+            PRIMARY KEY(id)
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+
+        // Dodajemo strani ključ tek nakon što su obe tabele kreirane
+        $this->addSql('ALTER TABLE callback ADD CONSTRAINT FK_callback_invoice_id FOREIGN KEY (invoice_id) REFERENCES invoice (id)');
+        // Kreiramo indeks za kolonu invoice_id
+        $this->addSql('CREATE INDEX IDX_callback_invoice_id ON callback (invoice_id)');
+
+        // Kreiramo tabelu messenger_messages
         $this->addSql('CREATE TABLE messenger_messages (
             id BIGINT AUTO_INCREMENT NOT NULL, 
             body LONGTEXT NOT NULL, 
@@ -58,9 +61,13 @@ final class Version20240924171230 extends AbstractMigration
 
     public function down(Schema $schema): void
     {
-        // Drop tables in reverse order
+        // Uklanjamo strani ključ i indeks pre brisanja tabela
+        $this->addSql('ALTER TABLE callback DROP FOREIGN KEY FK_callback_invoice_id');
+        $this->addSql('DROP INDEX IDX_callback_invoice_id ON callback');
+
+        // Brišemo tabele u obrnutom redosledu
         $this->addSql('DROP TABLE messenger_messages');
-        $this->addSql('DROP TABLE invoice');
         $this->addSql('DROP TABLE callback');
+        $this->addSql('DROP TABLE invoice');
     }
 }
