@@ -112,9 +112,6 @@ class Invoice
         return $this;
     }
 
-    /**
-     * @return Collection<int, Callback>
-     */
     public function getCallbacks(): Collection
     {
         return $this->callbacks;

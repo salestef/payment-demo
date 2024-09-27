@@ -2,11 +2,19 @@
 
 {% block body %}
     <h1>Payment Form</h1>
-    {{ form_start(form) }}
-    {{ form_row(form.amount) }}
-    {{ form_row(form.first_name) }}
-    {{ form_row(form.last_name) }}
-    {{ form_row(form.email) }}
-    {{ form_row(form.submit) }}
-    {{ form_end(form) }}
+    <form method="POST" action="{{ path('handle_invoice') }}">
+        <label>
+            <input type="text" name="first_name" placeholder="First Name">
+        </label>
+        <label>
+            <input type="text" name="last_name" placeholder="Last Name">
+        </label>
+        <label>
+            <input type="email" name="email" placeholder="Email">
+        </label>
+        <label>
+            <input type="number" step="0.01" name="amount" placeholder="Amount">
+        </label>
+        <button type="submit">Submit</button>
+    </form>
 {% endblock %}

@@ -1,17 +1,32 @@
 <?php
 namespace App\DTO;
 
-class PaymentDTO
+use Symfony\Component\Validator\Constraints as Assert;
+
+class InvoiceDTO
 {
+    /**
+     * @Assert\NotBlank()
+     * @Assert\Positive()
+     */
     private $amount;
 
+    /**
+     * @Assert\NotBlank()
+     */
     private $first_name;
 
+    /**
+     * @Assert\NotBlank()
+     */
     private $last_name;
 
+    /**
+     * @Assert\NotBlank()
+     * @Assert\Email()
+     */
     private $email;
 
-    // Getteri i setteri
     public function getAmount(): ?float
     {
         return $this->amount;
