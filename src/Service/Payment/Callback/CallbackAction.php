@@ -20,7 +20,7 @@ class CallbackAction
     {
     }
 
-    public function handle(CallbackDTO $callbackDTO): Callback
+    public function execute(CallbackDTO $callbackDTO): Callback
     {
         $invoice = $this->invoiceRepository->find($callbackDTO->getMerchantOrderId());
 

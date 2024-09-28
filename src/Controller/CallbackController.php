@@ -51,7 +51,7 @@ class CallbackController extends AbstractController
                 ->setSignature($receivedSignature)
                 ->setRawData($request->getContent());
 
-            $callback = $action->handle($DTO);
+            $callback = $action->execute($DTO);
 
             if ($callback->getStatus() === InvoiceStatusEnum::STATUS_ERROR->value) {
                 throw new PaymentProviderException(sprintf('Callback failed for invoice id [%s] with error status.', $DTO->getMerchantOrderId()), ['merchant_order_id' => $DTO->getMerchantOrderId()], 400);

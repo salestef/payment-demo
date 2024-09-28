@@ -8,7 +8,7 @@ use App\Enum\InvoiceStatusEnum;
 use App\Exception\PaymentProviderException;
 use App\Repository\InvoiceRepository;
 use App\Service\Payment\Invoice\InvoiceFactory;
-use App\Service\Payment\Invoice\Mock\PaymentProviderResponseMock;
+use App\Service\Payment\Invoice\CreateInvoiceAction;
 use App\Service\Payment\SignatureService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -38,7 +38,7 @@ class InvoiceController extends AbstractController
         ValidatorInterface              $validator,
         InvoiceFactory                  $invoiceFactory,
         EntityManagerInterface          $entityManager,
-        PaymentProviderResponseMock     $paymentProviderResponseMock
+        CreateInvoiceAction             $action
     ): Response
     {
         $errors = $validator->validate($DTO);
@@ -49,28 +49,30 @@ class InvoiceController extends AbstractController
         try {
             $invoice = $invoiceFactory->make($DTO);
 
-            $pspResponse = $paymentProviderResponseMock->mock($invoice);
+            $pspResponse = $action->execute($invoice);
+            $responseMock = $pspResponse->mock();
 
-            if ($pspResponse['status'] !== 'success') {
+            if ($pspResponse->getStatusCode() !== 201) {
+
                 throw new PaymentProviderException(
                     'Payment provider error',
-                    $pspResponse,
+                    $responseMock,
                     Response::HTTP_PAYMENT_REQUIRED
                 );
             }
 
             $invoice
                 ->setStatus(InvoiceStatusEnum::STATUS_PENDING->value)
-                ->setResponseData(json_encode($pspResponse));
+                ->setResponseData(json_encode($responseMock));
 
             $entityManager->flush();
 
-            if (isset($pspResponse['redirect_url'])) {
-                return $this->redirect($pspResponse['redirect_url']);
+            if (isset($responseMock['redirect_url'])) {
+                return $this->redirect($responseMock['redirect_url']);
             }
 
             return $this->render('payment/success.html.twig', [
-                'payment_info' => $pspResponse['payment_info'],
+                'payment_info' => $responseMock['payment_info'],
             ]);
 
         } catch (PaymentProviderException $e) {
@@ -88,7 +90,6 @@ class InvoiceController extends AbstractController
     }
 
 
-
     #[Route('/invoice/signature/{id}', name: 'invoice_signature', methods: ['GET'])]
     public function getInvoiceSignature(int $id, InvoiceRepository $invoiceRepository): JsonResponse
     {
@@ -96,7 +97,7 @@ class InvoiceController extends AbstractController
 
 //        $nest = ["merchant_order_id"=>$invoice->getId(),"amount"=>strval($invoice->getAmount()),"currency"=>"USD","status"=>$invoice->getStatus(),"timestamp" =>1726671599];
 
-        $nest = ["merchant_order_id"=>"{$invoice->getId()}","amount"=>"{$invoice->getAmount()}","currency"=>"USD","status"=>InvoiceStatusEnum::STATUS_SUCCESSFUL->value,"timestamp" =>1726671599];
+        $nest = ["merchant_order_id" => "{$invoice->getId()}", "amount" => "{$invoice->getAmount()}", "currency" => "USD", "status" => InvoiceStatusEnum::STATUS_SUCCESSFUL->value, "timestamp" => 1726671599];
 //        $jsonEncodedData = json_encode($rawData, JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
 
         $signature = $this->signatureService->sign($nest);

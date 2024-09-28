@@ -21,13 +21,11 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
-    # Register the Admin class for Callback entity
     admin.callback:
         class: App\Admin\CallbackAdmin
         tags:
             - { name: sonata.admin, model_class: App\Entity\Callback, manager_type: orm, label: Callback }
 
-    # Register the Admin class for Invoice entity (assuming you have one)
     admin.invoice:
         class: App\Admin\InvoiceAdmin
         tags:
@@ -35,3 +33,7 @@ services:
 
     # Add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    App\Service\Payment\Invoice\CreateInvoiceAction:
+        arguments:
+            $providerResponseMock: '@App\Service\Payment\Invoice\Mock\Response\SuccessResponseResponseMock'
