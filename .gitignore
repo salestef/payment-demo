@@ -1,4 +1,3 @@
-
 ###> symfony/framework-bundle ###
 /.env.local
 /.env.local.php
@@ -25,7 +24,6 @@
 
 # Ignore PHPUnit result cache
 /.phpunit.result.cache
-
 
 # Ignore generated public assets
 /public/build/
@@ -69,3 +67,33 @@ Thumbs.db
 # Ignore other IDE files
 .vscode/
 
+# MySQL data
+/mysql/*
+!mysql/.gitkeep  # Ako želiš da zadržiš prazan direktorijum u repozitorijumu
+
+# Docker-specific files
+docker-compose.override.yml
+*.env
+.env.local
+.env.test
+.env.*.local
+
+# Ignore Docker volumes and database dumps
+/docker-data/
+*.sql
+*.sql.gz
+
+# Ignore additional cache files
+/app/var/cache/dev/profiler/*
+/app/var/log/*
+/app/var/sessions/*
+/app/var/cache/*
+/app/var/test/*
+
+# Ignore backup and hidden files
+*.bak
+*.backup
+.*.swp
+
+# Ignore temporary PHP and profiler files
+/tmp/

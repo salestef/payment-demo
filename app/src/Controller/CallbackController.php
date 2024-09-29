@@ -44,7 +44,7 @@ class CallbackController extends AbstractController
             $calculatedSignature = $this->signatureService->sign($request->toArray());
 
             if ($receivedSignature !== $calculatedSignature) {
-                throw new PaymentProviderException('Invalid signature', [], 400);
+                throw new PaymentProviderException('Invalid signature', ['Signature' => $receivedSignature], 400);
             }
 
             $DTO
@@ -72,5 +72,4 @@ class CallbackController extends AbstractController
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-
 }

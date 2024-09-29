@@ -262,3 +262,11 @@ dd96b6,192.168.176.1,POST,http://localhost:8090/invoice,1727573112,,500,request
 a640ca,192.168.176.1,GET,http://localhost:8090/favicon.ico,1727573126,,404,request
 f274c0,192.168.176.1,GET,http://localhost:8090/favicon.ico,1727573384,a846ed,404,request
 a846ed,192.168.176.1,GET,http://localhost:8090/favicon.ico,1727573384,,404,request
+8904ac,192.168.176.1,POST,http://localhost:8090/invoice,1727576272,,200,request
+d7c543,192.168.176.1,GET,http://localhost:8090/admin/app/invoice/list,1727613593,,200,request
+de5246,192.168.176.1,GET,http://localhost:8090/favicon.ico,1727613594,55464a,404,request
+55464a,192.168.176.1,GET,http://localhost:8090/favicon.ico,1727613594,,404,request
+8aa3a8,192.168.176.1,POST,http://localhost:8090/invoice,1727613602,,200,request
+a7b142,192.168.176.1,GET,http://localhost:8090/invoice/signature/7,1727613811,,200,request
+89b8f8,192.168.176.3,POST,http://nginx/callback,1727614172,,200,request
+6ccb66,192.168.176.3,POST,http://nginx/callback,1727615861,,200,request
