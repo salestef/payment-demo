@@ -16,8 +16,7 @@ class CallbackAction
         protected readonly InvoiceRepository      $invoiceRepository,
         protected readonly EntityManagerInterface $em,
         protected readonly SerializerInterface    $serializer,
-    )
-    {
+    ) {
     }
 
     public function execute(CallbackDTO $callbackDTO): Callback
@@ -29,14 +28,22 @@ class CallbackAction
         }
 
         $status = $callbackDTO->getStatus() ?? InvoiceStatusEnum::STATUS_ERROR->value;
-        $invoice->setStatus(InvoiceStatusEnum::tryFrom($callbackDTO->getStatus()) ?? InvoiceStatusEnum::STATUS_ERROR);
+
+        $invoiceStatus = InvoiceStatusEnum::tryFrom($status);
+        if (!$invoiceStatus) {
+            throw new PaymentProviderException('Invalid invoice status', ['status' => $status], 400);
+        }
+
+        $invoice->setStatus($invoiceStatus);
 
         $callback = new Callback();
         $callback->setInvoice($invoice);
         $callback->setRawData($callbackDTO->getRawData());
         $callback->setSignature($callbackDTO->getSignature());
         $callback->setStatus($status);
+
         $this->em->persist($callback);
+        $this->em->persist($invoice);
         $this->em->flush();
 
         return $callback;

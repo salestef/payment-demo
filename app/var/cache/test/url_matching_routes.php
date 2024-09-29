@@ -56,7 +56,7 @@ return [
         183 => [[['_route' => 'admin_app_invoice_delete', '_controller' => 'sonata.admin.controller.crud::deleteAction', '_sonata_admin' => 'admin.invoice', '_sonata_name' => 'admin_app_invoice_delete'], ['id'], null, null, false, false, null]],
         195 => [[['_route' => 'admin_app_invoice_show', '_controller' => 'sonata.admin.controller.crud::showAction', '_sonata_admin' => 'admin.invoice', '_sonata_name' => 'admin_app_invoice_show'], ['id'], null, null, false, false, null]],
         247 => [
-            [['_route' => 'callback_generate_curl', '_controller' => 'App\\Controller\\CallbackController::getInvoiceSignature'], ['id'], ['GET' => 0], null, false, true, null],
+            [['_route' => 'callback_generate_curl', '_controller' => 'App\\Controller\\CallbackController::getCallbackCurlRequestTest'], ['id'], ['GET' => 0], null, false, true, null],
             [null, null, null, null, false, false, 0],
         ],
     ],

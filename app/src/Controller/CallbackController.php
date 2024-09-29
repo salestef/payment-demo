@@ -29,9 +29,8 @@ class CallbackController extends AbstractController
         Request                          $request,
         #[MapRequestPayload] CallbackDTO $DTO,
         ValidatorInterface               $validator,
-        CallbackAction                   $action,
-    ): JsonResponse
-    {
+        CallbackAction                   $action
+    ): JsonResponse {
         $errors = $validator->validate($DTO);
 
         if (count($errors) > 0) {
@@ -39,23 +38,24 @@ class CallbackController extends AbstractController
         }
 
         try {
-
             $receivedSignature = $request->headers->get('X-signature');
-
             $calculatedSignature = $this->signatureService->sign($request->toArray());
 
             if ($receivedSignature !== $calculatedSignature) {
                 throw new PaymentProviderException('Invalid signature', ['Signature' => $receivedSignature], 400);
             }
 
-            $DTO
-                ->setSignature($receivedSignature)
+            $DTO->setSignature($receivedSignature)
                 ->setRawData($request->getContent());
 
             $callback = $action->execute($DTO);
 
             if ($callback->getStatus() === InvoiceStatusEnum::STATUS_ERROR->value) {
-                throw new PaymentProviderException(sprintf('Callback failed for invoice id [%s] with error status.', $DTO->getMerchantOrderId()), ['merchant_order_id' => $DTO->getMerchantOrderId()], 400);
+                throw new PaymentProviderException(
+                    sprintf('Callback failed for invoice id [%s] with error status.', $DTO->getMerchantOrderId()),
+                    ['merchant_order_id' => $DTO->getMerchantOrderId()],
+                    400
+                );
             }
 
             return new JsonResponse(['message' => 'Callback processed successfully'], 200);
@@ -75,7 +75,7 @@ class CallbackController extends AbstractController
     }
 
     // TODO This route is used for TEST purposes only to generate CURL Callback request for specific Invoice and make testing easier.
-    // TODO Copy curl request and run it inside PHP Docker container to simulate Callback request from Payment Provider.
+    // TODO Get and copy curl request and run it inside PHP Docker container to simulate Callback request from Payment Provider.
     #[Route('/callback/generate-curl/invoice/{id}', name: 'callback_generate_curl', methods: ['GET'])]
     public function getCallbackCurlRequestTest(int $id, InvoiceRepository $invoiceRepository): JsonResponse
     {
@@ -88,7 +88,7 @@ class CallbackController extends AbstractController
         $data = [
             'merchant_order_id' => (string)$invoice->getId(),
             'amount' => (string)$invoice->getAmount(),
-            'currency' => 'USD',
+            'currency' => $invoice->getCurrency(),
             'status' => InvoiceStatusEnum::STATUS_SUCCESSFUL->value,
             'timestamp' => time()
         ];
