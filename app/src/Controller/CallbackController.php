@@ -77,7 +77,7 @@ class CallbackController extends AbstractController
     // TODO This route is used for TEST purposes only to generate CURL Callback request for specific Invoice and make testing easier.
     // TODO Copy curl request and run it inside PHP Docker container to simulate Callback request from Payment Provider.
     #[Route('/callback/generate-curl/invoice/{id}', name: 'callback_generate_curl', methods: ['GET'])]
-    public function getInvoiceSignature(int $id, InvoiceRepository $invoiceRepository): JsonResponse
+    public function getCallbackCurlRequestTest(int $id, InvoiceRepository $invoiceRepository): JsonResponse
     {
         $invoice = $invoiceRepository->find($id);
 

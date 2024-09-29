@@ -313,3 +313,7 @@ bef92b,192.168.192.3,POST,http://nginx/callback,1727627272,,200,request
 41379b,192.168.192.1,GET,http://localhost:8090/callback/generate-curl/invoice/10,1727627438,,200,request
 3df36c,192.168.192.3,POST,http://nginx/callback,1727627453,,200,request
 e70c51,192.168.192.3,POST,http://nginx/callback,1727628348,,200,request
+462a6e,192.168.192.1,GET,http://localhost:8090/callback/generate-curl/invoice/10,1727628500,,200,request
+5d1581,192.168.192.1,POST,http://localhost:8090/invoice,1727628512,,200,request
+e0b745,192.168.192.1,GET,http://localhost:8090/callback/generate-curl/invoice/11,1727628517,,200,request
+ce0bc6,192.168.192.3,POST,http://nginx/callback,1727628530,,200,request
