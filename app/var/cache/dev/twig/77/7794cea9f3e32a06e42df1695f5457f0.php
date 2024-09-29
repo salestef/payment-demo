@@ -74,17 +74,21 @@ class __TwigTemplate_4dbe8bf8b6a949acf7b3184c9e511d16 extends Template
 
         // line 4
         yield "    <h1>Payment Information</h1>
-    <p>Amount: ";
+    <p>Id: ";
         // line 5
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, (isset($context["payment_info"]) || array_key_exists("payment_info", $context) ? $context["payment_info"] : (function () { throw new RuntimeError('Variable "payment_info" does not exist.', 5, $this->source); })()), "amount", [], "any", false, false, false, 5), "html", null, true);
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, (isset($context["invoice"]) || array_key_exists("invoice", $context) ? $context["invoice"] : (function () { throw new RuntimeError('Variable "invoice" does not exist.', 5, $this->source); })()), "getId", [], "method", false, false, false, 5), "html", null, true);
+        yield "</p>
+    <p>Amount: ";
+        // line 6
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, (isset($context["invoice"]) || array_key_exists("invoice", $context) ? $context["invoice"] : (function () { throw new RuntimeError('Variable "invoice" does not exist.', 6, $this->source); })()), "getAmount", [], "method", false, false, false, 6), "html", null, true);
         yield "</p>
     <p>Currency: ";
-        // line 6
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, (isset($context["payment_info"]) || array_key_exists("payment_info", $context) ? $context["payment_info"] : (function () { throw new RuntimeError('Variable "payment_info" does not exist.', 6, $this->source); })()), "currency", [], "any", false, false, false, 6), "html", null, true);
+        // line 7
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, (isset($context["invoice"]) || array_key_exists("invoice", $context) ? $context["invoice"] : (function () { throw new RuntimeError('Variable "invoice" does not exist.', 7, $this->source); })()), "getCurrency", [], "method", false, false, false, 7), "html", null, true);
         yield "</p>
     <img src=\"";
-        // line 7
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["payment_info"]) || array_key_exists("payment_info", $context) ? $context["payment_info"] : (function () { throw new RuntimeError('Variable "payment_info" does not exist.', 7, $this->source); })()), "metadata", [], "any", false, false, false, 7), "qr_code", [], "any", false, false, false, 7), "html", null, true);
+        // line 8
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["payment_info"]) || array_key_exists("payment_info", $context) ? $context["payment_info"] : (function () { throw new RuntimeError('Variable "payment_info" does not exist.', 8, $this->source); })()), "metadata", [], "any", false, false, false, 8), "qr_code", [], "any", false, false, false, 8), "html", null, true);
         yield "\" alt=\"QR Code\">
 ";
         
@@ -117,7 +121,7 @@ class __TwigTemplate_4dbe8bf8b6a949acf7b3184c9e511d16 extends Template
      */
     public function getDebugInfo(): array
     {
-        return array (  87 => 7,  83 => 6,  79 => 5,  76 => 4,  63 => 3,  40 => 1,);
+        return array (  91 => 8,  87 => 7,  83 => 6,  79 => 5,  76 => 4,  63 => 3,  40 => 1,);
     }
 
     public function getSourceContext(): Source
@@ -126,8 +130,9 @@ class __TwigTemplate_4dbe8bf8b6a949acf7b3184c9e511d16 extends Template
 
 {% block body %}
     <h1>Payment Information</h1>
-    <p>Amount: {{ payment_info.amount }}</p>
-    <p>Currency: {{ payment_info.currency }}</p>
+    <p>Id: {{ invoice.getId() }}</p>
+    <p>Amount: {{ invoice.getAmount() }}</p>
+    <p>Currency: {{ invoice.getCurrency() }}</p>
     <img src=\"{{ payment_info.metadata.qr_code }}\" alt=\"QR Code\">
 {% endblock %}
 ", "payment/success.html.twig", "/var/www/project/templates/payment/success.html.twig");

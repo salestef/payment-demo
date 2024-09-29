@@ -16,7 +16,7 @@ if (!\class_exists(App_KernelTestDebugContainer::class, false)) {
 
 return new \ContainerMIBOmSB\App_KernelTestDebugContainer([
     'container.build_hash' => 'MIBOmSB',
-    'container.build_id' => 'a4cb9734',
-    'container.build_time' => 1727573011,
+    'container.build_id' => '9805138b',
+    'container.build_time' => 1727622464,
     'container.runtime_mode' => \in_array(\PHP_SAPI, ['cli', 'phpdbg', 'embed'], true) ? 'web=0' : 'web=1',
 ], __DIR__.\DIRECTORY_SEPARATOR.'ContainerMIBOmSB');

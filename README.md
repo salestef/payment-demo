@@ -32,9 +32,11 @@ docker-compose exec -it php bash
 
 1. Create Database for test env (inside database docker container)
     - CREATE DATABASE payment_db_test;
-2. Run Migrations for test env (inside php docker container)
+2. Delete existing test database if there is one (optional)(inside php docker container)
+    - bin/console doctrine:database:drop --force --env=test
+3. Run Migrations for test env (inside php docker container)
     - bin/console doctrine:migrations:migrate --env=test
-3. Run tests (inside php docker container)
+4. Run tests (inside php docker container)
     - bin/phpunit tests
 
 # Example of curl request for Callback Action (inside php docker container)
@@ -47,9 +49,10 @@ docker-compose exec -it php bash
 
 # Project Description
 
-1. Invoice Controller has 2 route:
-    - Form for Invoice
-    - Logic for Create Invoice action - Uses services from /src/Service/Payment/Invoice/ set DTO, to create invoice,
+1. Invoice Controller has 2 routes:
+    - Form for Invoice default route "/"
+    - Logic for Create Invoice action "/invoice" - Uses services from /src/Service/Payment/Invoice/ set DTO, to create
+      invoice,
       simulate
       request to payment provider and mock responses, handles error responses and return success view if payment
       provider response is success 201. Mock is set by default on success response in services.yaml.

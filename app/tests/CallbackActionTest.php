@@ -1,23 +1,50 @@
 <?php
 
 use App\Entity\Callback;
+use App\Entity\Invoice;
 use App\Enum\InvoiceStatusEnum;
 use App\Service\Payment\Callback\CallbackAction;
 use App\Service\Payment\SignatureService;
+use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 class CallbackActionTest extends WebTestCase
 {
+    protected readonly EntityManager $em;
+
+    protected function setUp(): void
+    {
+        $kernel = static::bootKernel();
+        $container = $kernel->getContainer();
+
+        $this->em = $container->get('doctrine.orm.entity_manager');
+
+
+        self::ensureKernelShutdown();
+    }
+
+    protected function generateInvoice(): Invoice {
+
+        $invoice = (new Invoice())
+            ->setAmount(100)
+            ->setStatus(InvoiceStatusEnum::STATUS_PENDING)
+            ->setCurrency('EUR');
+
+        $this->em->persist($invoice);
+        $this->em->flush();
+        return $invoice;
+    }
     public function testHandleCallbackSuccess(): void
     {
         $signatureService = $this->createMock(SignatureService::class);
         $signatureService->method('sign')->willReturn('validsignature');
 
+        $invoice = $this->generateInvoice();
         $data = [
-            'merchant_order_id' => '6',
-            'amount' => 100,
-            'currency' => 'USD',
+            'merchant_order_id' => strval($invoice->getId()),
+            'amount' => $invoice->getAmount(),
+            'currency' => $invoice->getCurrency(),
             'status' => InvoiceStatusEnum::STATUS_SUCCESSFUL->value,
             'timestamp' => time(),
         ];
@@ -49,10 +76,11 @@ class CallbackActionTest extends WebTestCase
         $signatureService = $this->createMock(SignatureService::class);
         $signatureService->method('sign')->willReturn('validsignature');
 
+        $invoice = $this->generateInvoice();
         $data = [
-            'merchant_order_id' => '12345',
-            'amount' => 100,
-            'currency' => 'USD',
+            'merchant_order_id' => strval($invoice->getId()),
+            'amount' => $invoice->getAmount(),
+            'currency' => $invoice->getCurrency(),
             'status' => InvoiceStatusEnum::STATUS_SUCCESSFUL->value,
             'timestamp' => time(),
         ];
@@ -90,10 +118,11 @@ class CallbackActionTest extends WebTestCase
         $callbackAction = $this->createMock(CallbackAction::class);
         $callbackAction->method('execute')->willReturn($callback);
 
+        $invoice = $this->generateInvoice();
         $data = [
-            'merchant_order_id' => '12345',
-            'amount' => 100,
-            'currency' => 'USD',
+            'merchant_order_id' => strval($invoice->getId()),
+            'amount' => $invoice->getAmount(),
+            'currency' => $invoice->getCurrency(),
             'status' => InvoiceStatusEnum::STATUS_ERROR->value,
             'timestamp' => time(),
         ];
@@ -117,8 +146,8 @@ class CallbackActionTest extends WebTestCase
         $this->assertResponseStatusCodeSame(400);
         $this->assertJsonStringEqualsJsonString(
             json_encode([
-                'error' => 'Callback failed for invoice id [12345] with error status.',
-                'details' => ['merchant_order_id' => '12345']
+                'error' => "Callback failed for invoice id [{$invoice->getId()}] with error status.",
+                'details' => ['merchant_order_id' => strval($invoice->getId())]
             ]),
             $client->getResponse()->getContent()
         );

@@ -16,7 +16,7 @@ if (!\class_exists(App_KernelDevDebugContainer::class, false)) {
 
 return new \ContainerJtTfF1f\App_KernelDevDebugContainer([
     'container.build_hash' => 'JtTfF1f',
-    'container.build_id' => 'ba53e7c1',
-    'container.build_time' => 1727573085,
+    'container.build_id' => '914a32bf',
+    'container.build_time' => 1727621879,
     'container.runtime_mode' => \in_array(\PHP_SAPI, ['cli', 'phpdbg', 'embed'], true) ? 'web=0' : 'web=1',
 ], __DIR__.\DIRECTORY_SEPARATOR.'ContainerJtTfF1f');

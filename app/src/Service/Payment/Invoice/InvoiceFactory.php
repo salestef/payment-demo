@@ -19,7 +19,8 @@ class InvoiceFactory
     {
         $invoice = (new Invoice())
             ->setAmount($dto->getAmount())
-            ->setStatus(InvoiceStatusEnum::STATUS_CREATED->value);
+            ->setStatus(InvoiceStatusEnum::STATUS_CREATED)
+            ->setCurrency($dto->getCurrency());
 
         $this->em->persist($invoice);
         $this->em->flush();

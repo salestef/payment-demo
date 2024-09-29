@@ -2,7 +2,8 @@
 
 {% block body %}
     <h1>Payment Information</h1>
-    <p>Amount: {{ payment_info.amount }}</p>
-    <p>Currency: {{ payment_info.currency }}</p>
+    <p>Id: {{ invoice.getId() }}</p>
+    <p>Amount: {{ invoice.getAmount() }}</p>
+    <p>Currency: {{ invoice.getCurrency() }}</p>
     <img src="{{ payment_info.metadata.qr_code }}" alt="QR Code">
 {% endblock %}

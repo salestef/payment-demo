@@ -63,8 +63,10 @@ class InvoiceController extends AbstractController
             }
 
             $invoice
-                ->setStatus(InvoiceStatusEnum::STATUS_PENDING->value)
-                ->setResponseData(json_encode($responseMock));
+                ->setStatus(InvoiceStatusEnum::STATUS_PENDING)
+                ->setResponseData(json_encode($responseMock))
+                ->setQrCode($responseMock['payment_info']['metadata']['qr_code'] ?? null)
+            ;
 
             $entityManager->flush();
 
@@ -74,6 +76,7 @@ class InvoiceController extends AbstractController
 
             return $this->render('payment/success.html.twig', [
                 'payment_info' => $responseMock['payment_info'],
+                'invoice' => $invoice,
             ]);
 
         } catch (PaymentProviderException $e) {

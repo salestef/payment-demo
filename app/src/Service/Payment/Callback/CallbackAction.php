@@ -29,7 +29,7 @@ class CallbackAction
         }
 
         $status = $callbackDTO->getStatus() ?? InvoiceStatusEnum::STATUS_ERROR->value;
-        $invoice->setStatus($status);
+        $invoice->setStatus(InvoiceStatusEnum::tryFrom($callbackDTO->getStatus()) ?? InvoiceStatusEnum::STATUS_ERROR);
 
         $callback = new Callback();
         $callback->setInvoice($invoice);

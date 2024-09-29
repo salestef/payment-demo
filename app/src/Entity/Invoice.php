@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enum\InvoiceStatusEnum;
 use App\Repository\InvoiceRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -11,21 +12,16 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: InvoiceRepository::class)]
 class Invoice
 {
-    public const STATUS_CREATED = 'CREATED';
-    public const STATUS_PENDING = 'PENDING';
-    public const STATUS_SUCCESSFUL = 'SUCCESSFUL';
-    public const STATUS_ERROR = 'ERROR';
-    public const STATUS_EXPIRED = 'EXPIRED';
-    public const STATUS_REJECTED = 'REJECTED';
-
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-//    #[ORM\Column(type: 'string', enumType: InvoiceStatus::class)]
-    #[ORM\Column(length: 255)]
-    private ?string $status = null;
+    #[ORM\Column(type: 'string', enumType: InvoiceStatusEnum::class)]
+    private InvoiceStatusEnum $status;
+
+    #[ORM\Column(length: 3, nullable: true)]
+    private ?string $currency = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $requestData = null;
@@ -33,7 +29,7 @@ class Invoice
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $responseData = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $qrCode = null;
 
     #[ORM\Column(type: Types::FLOAT, options: ['default' => 0])]
@@ -45,6 +41,7 @@ class Invoice
     public function __construct()
     {
         $this->callbacks = new ArrayCollection();
+        $this->status = InvoiceStatusEnum::STATUS_CREATED;
     }
 
     public function getId(): ?int
@@ -52,14 +49,26 @@ class Invoice
         return $this->id;
     }
 
-    public function getStatus(): ?string
+    public function getStatus(): InvoiceStatusEnum
     {
         return $this->status;
     }
 
-    public function setStatus(string $status): static
+    public function setStatus(InvoiceStatusEnum $status): static
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function getCurrency(): ?string
+    {
+        return $this->currency;
+    }
+
+    public function setCurrency(?string $currency): static
+    {
+        $this->currency = $currency;
 
         return $this;
     }

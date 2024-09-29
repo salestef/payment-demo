@@ -73,24 +73,36 @@ class __TwigTemplate_04d46c32c7d70add36aa62f3bdd7e43f extends Template
         $__internal_6f47bbe9983af81f1e7450e9a3e3768f->enter($__internal_6f47bbe9983af81f1e7450e9a3e3768f_prof = new \Twig\Profiler\Profile($this->getTemplateName(), "block", "body"));
 
         // line 4
-        yield "    <h1>Payment Form</h1>
+        yield "    <h1>Invoice Form</h1>
     <form method=\"POST\" action=\"";
         // line 5
         yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("handle_invoice");
         yield "\">
-        <label>
-            <input type=\"text\" name=\"first_name\" placeholder=\"First Name\">
-        </label>
-        <label>
-            <input type=\"text\" name=\"last_name\" placeholder=\"Last Name\">
-        </label>
-        <label>
-            <input type=\"email\" name=\"email\" placeholder=\"Email\">
-        </label>
-        <label>
-            <input type=\"number\" step=\"0.01\" name=\"amount\" placeholder=\"Amount\">
-        </label>
-        <button type=\"submit\">Submit</button>
+        <div style=\"margin-bottom: 15px;\">
+            <label for=\"first_name\">First Name:</label>
+            <input type=\"text\" id=\"first_name\" name=\"first_name\" placeholder=\"Enter your first name\" required style=\"margin-top: 5px; width: 300px;\">
+        </div>
+        <div style=\"margin-bottom: 15px;\">
+            <label for=\"last_name\">Last Name:</label>
+            <input type=\"text\" id=\"last_name\" name=\"last_name\" placeholder=\"Enter your last name\" required style=\"margin-top: 5px; width: 300px;\">
+        </div>
+        <div style=\"margin-bottom: 15px;\">
+            <label for=\"email\">Email:</label>
+            <input type=\"email\" id=\"email\" name=\"email\" placeholder=\"Enter your email address\" required style=\"margin-top: 5px; width: 300px;\">
+        </div>
+        <div style=\"margin-bottom: 15px;\">
+            <label for=\"amount\">Amount:</label>
+            <input type=\"text\" id=\"amount\" name=\"amount\" placeholder=\"Enter amount\" pattern=\"^\\d+(\\.\\d{1,2})?\$\" required style=\"margin-top: 5px; width: 300px;\">
+            <small>Format: 123.45</small>
+        </div>
+        <div style=\"margin-bottom: 15px;\">
+            <label for=\"currency\">Currency:</label>
+            <select id=\"currency\" name=\"currency\" required style=\"margin-top: 5px; width: 300px;\">
+                <option value=\"EUR\">EUR</option>
+                <option value=\"USD\">USD</option>
+            </select>
+        </div>
+        <button type=\"submit\" style=\"padding: 10px 15px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;\">Submit</button>
     </form>
 ";
         
@@ -131,21 +143,33 @@ class __TwigTemplate_04d46c32c7d70add36aa62f3bdd7e43f extends Template
         return new Source("{% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Payment Form</h1>
+    <h1>Invoice Form</h1>
     <form method=\"POST\" action=\"{{ path('handle_invoice') }}\">
-        <label>
-            <input type=\"text\" name=\"first_name\" placeholder=\"First Name\">
-        </label>
-        <label>
-            <input type=\"text\" name=\"last_name\" placeholder=\"Last Name\">
-        </label>
-        <label>
-            <input type=\"email\" name=\"email\" placeholder=\"Email\">
-        </label>
-        <label>
-            <input type=\"number\" step=\"0.01\" name=\"amount\" placeholder=\"Amount\">
-        </label>
-        <button type=\"submit\">Submit</button>
+        <div style=\"margin-bottom: 15px;\">
+            <label for=\"first_name\">First Name:</label>
+            <input type=\"text\" id=\"first_name\" name=\"first_name\" placeholder=\"Enter your first name\" required style=\"margin-top: 5px; width: 300px;\">
+        </div>
+        <div style=\"margin-bottom: 15px;\">
+            <label for=\"last_name\">Last Name:</label>
+            <input type=\"text\" id=\"last_name\" name=\"last_name\" placeholder=\"Enter your last name\" required style=\"margin-top: 5px; width: 300px;\">
+        </div>
+        <div style=\"margin-bottom: 15px;\">
+            <label for=\"email\">Email:</label>
+            <input type=\"email\" id=\"email\" name=\"email\" placeholder=\"Enter your email address\" required style=\"margin-top: 5px; width: 300px;\">
+        </div>
+        <div style=\"margin-bottom: 15px;\">
+            <label for=\"amount\">Amount:</label>
+            <input type=\"text\" id=\"amount\" name=\"amount\" placeholder=\"Enter amount\" pattern=\"^\\d+(\\.\\d{1,2})?\$\" required style=\"margin-top: 5px; width: 300px;\">
+            <small>Format: 123.45</small>
+        </div>
+        <div style=\"margin-bottom: 15px;\">
+            <label for=\"currency\">Currency:</label>
+            <select id=\"currency\" name=\"currency\" required style=\"margin-top: 5px; width: 300px;\">
+                <option value=\"EUR\">EUR</option>
+                <option value=\"USD\">USD</option>
+            </select>
+        </div>
+        <button type=\"submit\" style=\"padding: 10px 15px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;\">Submit</button>
     </form>
 {% endblock %}
 ", "payment/form.html.twig", "/var/www/project/templates/payment/form.html.twig");

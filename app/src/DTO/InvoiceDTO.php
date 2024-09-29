@@ -1,4 +1,5 @@
 <?php
+
 namespace App\DTO;
 
 use Symfony\Component\Validator\Constraints as Assert;
@@ -26,6 +27,12 @@ class InvoiceDTO
      * @Assert\Email()
      */
     private $email;
+
+    /**
+     * @Assert\NotBlank()
+     * @Assert\Choice(choices={"EUR", "USD"})
+     */
+    private $currency;
 
     public function getAmount(): ?float
     {
@@ -68,6 +75,17 @@ class InvoiceDTO
     public function setEmail(?string $email): self
     {
         $this->email = $email;
+        return $this;
+    }
+
+    public function getCurrency(): ?string
+    {
+        return $this->currency;
+    }
+
+    public function setCurrency(string $currency): self
+    {
+        $this->currency = $currency;
         return $this;
     }
 }

@@ -16,18 +16,17 @@ final class Version20240924171230 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        // Prvo kreiramo tabelu invoices
         $this->addSql('CREATE TABLE invoice (
             id INT AUTO_INCREMENT NOT NULL, 
-            status VARCHAR(255) NOT NULL, 
+            status ENUM(\'CREATED\', \'PENDING\', \'SUCCESSFUL\', \'ERROR\', \'EXPIRED\', \'REJECTED\') NOT NULL, 
             request_data LONGTEXT DEFAULT NULL, 
             response_data LONGTEXT DEFAULT NULL, 
-            qr_code VARCHAR(255) DEFAULT NULL, 
+            qr_code LONGTEXT DEFAULT NULL, 
             amount DOUBLE PRECISION DEFAULT 0 NOT NULL,
+            currency VARCHAR(3) DEFAULT NULL, 
             PRIMARY KEY(id)
         ) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
 
-        // Sada kreiramo tabelu callback koja zavisi od tabele invoice
         $this->addSql('CREATE TABLE callback (
             id INT AUTO_INCREMENT NOT NULL, 
             info LONGTEXT DEFAULT NULL, 
@@ -38,12 +37,9 @@ final class Version20240924171230 extends AbstractMigration
             PRIMARY KEY(id)
         ) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
 
-        // Dodajemo strani ključ tek nakon što su obe tabele kreirane
         $this->addSql('ALTER TABLE callback ADD CONSTRAINT FK_callback_invoice_id FOREIGN KEY (invoice_id) REFERENCES invoice (id)');
-        // Kreiramo indeks za kolonu invoice_id
         $this->addSql('CREATE INDEX IDX_callback_invoice_id ON callback (invoice_id)');
 
-        // Kreiramo tabelu messenger_messages
         $this->addSql('CREATE TABLE messenger_messages (
             id BIGINT AUTO_INCREMENT NOT NULL, 
             body LONGTEXT NOT NULL, 
@@ -61,11 +57,9 @@ final class Version20240924171230 extends AbstractMigration
 
     public function down(Schema $schema): void
     {
-        // Uklanjamo strani ključ i indeks pre brisanja tabela
         $this->addSql('ALTER TABLE callback DROP FOREIGN KEY FK_callback_invoice_id');
         $this->addSql('DROP INDEX IDX_callback_invoice_id ON callback');
 
-        // Brišemo tabele u obrnutom redosledu
         $this->addSql('DROP TABLE messenger_messages');
         $this->addSql('DROP TABLE callback');
         $this->addSql('DROP TABLE invoice');
