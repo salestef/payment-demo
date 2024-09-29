@@ -65,8 +65,7 @@ class InvoiceController extends AbstractController
             $invoice
                 ->setStatus(InvoiceStatusEnum::STATUS_PENDING)
                 ->setResponseData(json_encode($responseMock))
-                ->setQrCode($responseMock['payment_info']['metadata']['qr_code'] ?? null)
-            ;
+                ->setQrCode($responseMock['payment_info']['metadata']['qr_code'] ?? null);
 
             $entityManager->flush();
 
@@ -91,20 +90,5 @@ class InvoiceController extends AbstractController
                 'message' => $e->getMessage()
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-    }
-
-
-    #[Route('/invoice/signature/{id}', name: 'invoice_signature', methods: ['GET'])]
-    public function getInvoiceSignature(int $id, InvoiceRepository $invoiceRepository): JsonResponse
-    {
-        $invoice = $invoiceRepository->find($id);
-
-//        $nest = ["merchant_order_id"=>$invoice->getId(),"amount"=>strval($invoice->getAmount()),"currency"=>"USD","status"=>$invoice->getStatus(),"timestamp" =>1726671599];
-
-        $nest = ["merchant_order_id" => "{$invoice->getId()}", "amount" => "{$invoice->getAmount()}", "currency" => "USD", "status" => InvoiceStatusEnum::STATUS_SUCCESSFUL->value, "timestamp" => 1726671599];
-//        $jsonEncodedData = json_encode($rawData, JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
-
-        $signature = $this->signatureService->sign($nest);
-        return new JsonResponse(['signature' => $signature], 200);
     }
 }

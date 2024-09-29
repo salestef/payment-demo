@@ -30,22 +30,25 @@ docker-compose exec -it php bash
 
 # Test environment
 
-1. Create Database for test env (inside database docker container)
-    - CREATE DATABASE payment_db_test;
-2. Delete existing test database if there is one (optional)(inside php docker container)
+1. Delete existing test database if there is one (optional)(inside php docker container)
     - bin/console doctrine:database:drop --force --env=test
+2. Create Database for test env (inside database docker container)
+    - CREATE DATABASE payment_db_test;
 3. Run Migrations for test env (inside php docker container)
     - bin/console doctrine:migrations:migrate --env=test
 4. Run tests (inside php docker container)
     - bin/phpunit tests
 
-# Example of curl request for Callback Action (inside php docker container)
+# Generate CURL request for Callback action (for TEST purposes only)
 
-- Command:
-    * curl -H 'Content-Type: application/json' -H  'X-signature:
-      {signatureNeedsToBeValidUseSignatureService}' -d '{"merchant_order_id":"{invoiceId}","amount":"{invoiceAmount}","
-      currency":"USD","status":"
-      SUCCESSFUL","timestamp":1726671599}' 'http://nginx/callback'
+- NOTE!!! Use route /callback/generate-curl/invoice/{invoiceId} to generate CURL /callback request. This is used for
+  TEST purposes only and to make testing of Callback action (simulation of Payment provider request) easier.
+    1. Go on browser on /callback/generate-curl/invoice/{invoiceId} route and COPY valid CURL Callback request
+    2. Run generated CURL request inside php docker container. Example:
+        * curl -H 'Content-Type: application/json' -H 'X-signature:
+          MWI4ZWU3Yzg0NGFiZjk5NmNlNTkyOWQxN2QzZTc3NWRhODdkZWI3ZTVmMzQ0YzUyOGIzZDhjOGMzNWQ0MDE5MA==' -d '{"
+          merchant_order_id":"10","amount":"340","currency":"USD","status":"SUCCESSFUL","timestamp":
+          1727627438}' 'http://nginx/callback'
 
 # Project Description
 

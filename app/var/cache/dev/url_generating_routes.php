@@ -40,11 +40,11 @@ return [
     '_profiler_exception' => [['token'], ['_controller' => 'web_profiler.controller.exception_panel::body'], [], [['text', '/exception'], ['variable', '/', '[^/]++', 'token', true], ['text', '/_profiler']], [], [], []],
     '_profiler_exception_css' => [['token'], ['_controller' => 'web_profiler.controller.exception_panel::stylesheet'], [], [['text', '/exception.css'], ['variable', '/', '[^/]++', 'token', true], ['text', '/_profiler']], [], [], []],
     'handle_callback' => [[], ['_controller' => 'App\\Controller\\CallbackController::handleCallback'], [], [['text', '/callback']], [], [], []],
+    'callback_generate_curl' => [['id'], ['_controller' => 'App\\Controller\\CallbackController::getInvoiceSignature'], [], [['variable', '/', '[^/]++', 'id', true], ['text', '/callback/generate-curl/invoice']], [], [], []],
     'payment_form' => [[], ['_controller' => 'App\\Controller\\InvoiceController::showPaymentForm'], [], [['text', '/']], [], [], []],
     'handle_invoice' => [[], ['_controller' => 'App\\Controller\\InvoiceController::handleInvoice'], [], [['text', '/invoice']], [], [], []],
-    'invoice_signature' => [['id'], ['_controller' => 'App\\Controller\\InvoiceController::getInvoiceSignature'], [], [['variable', '/', '[^/]++', 'id', true], ['text', '/invoice/signature']], [], [], []],
     'App\Controller\CallbackController::handleCallback' => [[], ['_controller' => 'App\\Controller\\CallbackController::handleCallback'], [], [['text', '/callback']], [], [], []],
+    'App\Controller\CallbackController::getInvoiceSignature' => [['id'], ['_controller' => 'App\\Controller\\CallbackController::getInvoiceSignature'], [], [['variable', '/', '[^/]++', 'id', true], ['text', '/callback/generate-curl/invoice']], [], [], []],
     'App\Controller\InvoiceController::showPaymentForm' => [[], ['_controller' => 'App\\Controller\\InvoiceController::showPaymentForm'], [], [['text', '/']], [], [], []],
     'App\Controller\InvoiceController::handleInvoice' => [[], ['_controller' => 'App\\Controller\\InvoiceController::handleInvoice'], [], [['text', '/invoice']], [], [], []],
-    'App\Controller\InvoiceController::getInvoiceSignature' => [['id'], ['_controller' => 'App\\Controller\\InvoiceController::getInvoiceSignature'], [], [['variable', '/', '[^/]++', 'id', true], ['text', '/invoice/signature']], [], [], []],
 ];

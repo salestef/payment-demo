@@ -44,7 +44,7 @@ return [
                         .')'
                     .')'
                 .')'
-                .'|/invoice/signature/([^/]++)(*:233)'
+                .'|/callback/generate\\-curl/invoice/([^/]++)(*:247)'
             .')/?$}sDu',
     ],
     [ // $dynamicRoutes
@@ -55,8 +55,8 @@ return [
         169 => [[['_route' => 'admin_app_invoice_edit', '_controller' => 'sonata.admin.controller.crud::editAction', '_sonata_admin' => 'admin.invoice', '_sonata_name' => 'admin_app_invoice_edit'], ['id'], null, null, false, false, null]],
         183 => [[['_route' => 'admin_app_invoice_delete', '_controller' => 'sonata.admin.controller.crud::deleteAction', '_sonata_admin' => 'admin.invoice', '_sonata_name' => 'admin_app_invoice_delete'], ['id'], null, null, false, false, null]],
         195 => [[['_route' => 'admin_app_invoice_show', '_controller' => 'sonata.admin.controller.crud::showAction', '_sonata_admin' => 'admin.invoice', '_sonata_name' => 'admin_app_invoice_show'], ['id'], null, null, false, false, null]],
-        233 => [
-            [['_route' => 'invoice_signature', '_controller' => 'App\\Controller\\InvoiceController::getInvoiceSignature'], ['id'], ['GET' => 0], null, false, true, null],
+        247 => [
+            [['_route' => 'callback_generate_curl', '_controller' => 'App\\Controller\\CallbackController::getInvoiceSignature'], ['id'], ['GET' => 0], null, false, true, null],
             [null, null, null, null, false, false, 0],
         ],
     ],

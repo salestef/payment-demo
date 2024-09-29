@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\DTO\CallbackDTO;
 use App\Enum\InvoiceStatusEnum;
 use App\Exception\PaymentProviderException;
+use App\Repository\InvoiceRepository;
 use App\Service\Payment\Callback\CallbackAction;
 use App\Service\Payment\SignatureService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -71,5 +72,40 @@ class CallbackController extends AbstractController
                 'message' => $e->getMessage(),
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
+    }
+
+    // TODO This route is used for TEST purposes only to generate CURL Callback request for specific Invoice and make testing easier.
+    // TODO Copy curl request and run it inside PHP Docker container to simulate Callback request from Payment Provider.
+    #[Route('/callback/generate-curl/invoice/{id}', name: 'callback_generate_curl', methods: ['GET'])]
+    public function getInvoiceSignature(int $id, InvoiceRepository $invoiceRepository): JsonResponse
+    {
+        $invoice = $invoiceRepository->find($id);
+
+        if (!$invoice) {
+            return new JsonResponse(['error' => 'Invoice not found'], 404);
+        }
+
+        $data = [
+            'merchant_order_id' => (string)$invoice->getId(),
+            'amount' => (string)$invoice->getAmount(),
+            'currency' => 'USD',
+            'status' => InvoiceStatusEnum::STATUS_SUCCESSFUL->value,
+            'timestamp' => time()
+        ];
+
+        $signature = $this->signatureService->sign($data);
+
+        $jsonData = json_encode($data, JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
+
+        $curlCommand = sprintf(
+            "curl -H 'Content-Type: application/json' -H 'X-signature: %s' -d '%s' 'http://nginx/callback'",
+            $signature,
+            $jsonData
+        );
+
+        return new JsonResponse([
+            'signature' => $signature,
+            'curl_command' => $curlCommand
+        ], 200);
     }
 }
