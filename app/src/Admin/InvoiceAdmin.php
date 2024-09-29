@@ -3,11 +3,13 @@
 namespace App\Admin;
 
 use App\Entity\Invoice;
+use App\Enum\InvoiceStatusEnum;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
@@ -18,9 +20,12 @@ final class InvoiceAdmin extends AbstractAdmin
         $listMapper
             ->addIdentifier('id')
             ->add('status')
-            ->add('qrCode')
+            ->add('currency')
+            ->add('amount')
             ->add('requestData')
-            ->add('responseData');
+            ->add('responseData')
+            ->add('qrCode')
+        ;
     }
 
     protected function configureFormFields(FormMapper $formMapper): void
@@ -28,14 +33,16 @@ final class InvoiceAdmin extends AbstractAdmin
         $formMapper
             ->add('status', ChoiceType::class, [
                 'choices' => [
-                    'Created' => Invoice::STATUS_CREATED,
-                    'Pending' => Invoice::STATUS_PENDING,
-                    'Successful' => Invoice::STATUS_SUCCESSFUL,
-                    'Error' => Invoice::STATUS_ERROR,
-                    'Expired' => Invoice::STATUS_EXPIRED,
-                    'Rejected' => Invoice::STATUS_REJECTED,
+                    'Created' => InvoiceStatusEnum::STATUS_CREATED,
+                    'Pending' => InvoiceStatusEnum::STATUS_PENDING,
+                    'Successful' => InvoiceStatusEnum::STATUS_SUCCESSFUL,
+                    'Error' => InvoiceStatusEnum::STATUS_ERROR,
+                    'Expired' => InvoiceStatusEnum::STATUS_EXPIRED,
+                    'Rejected' => InvoiceStatusEnum::STATUS_REJECTED,
                 ],
             ])
+            ->add('currency', TextType::class)
+            ->add('amount', NumberType::class)
             ->add('requestData', TextareaType::class)
             ->add('responseData', TextareaType::class)
             ->add('qrCode', TextType::class);
@@ -46,6 +53,8 @@ final class InvoiceAdmin extends AbstractAdmin
         $showMapper
             ->add('id')
             ->add('status')
+            ->add('currency')
+            ->add('amount')
             ->add('requestData')
             ->add('responseData')
             ->add('qrCode');

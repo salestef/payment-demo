@@ -17,35 +17,40 @@ final class CallbackAdmin extends AbstractAdmin
     {
         $listMapper
             ->addIdentifier('id')
-            ->add('info')
-            ->add('status');
+            ->add('rawData')
+            ->add('status')
+            ->add('info');
     }
 
     protected function configureFormFields(FormMapper $formMapper): void
     {
         $formMapper
+            ->add('rawData', TextareaType::class)
+            ->add('status', TextType::class, [
+                'label' => 'Status',
+                'required' => true,
+            ])
             ->add('info', TextareaType::class, [
                 'label' => 'Info',
                 'required' => false,
             ])
-            ->add('status', TextType::class, [
-                'label' => 'Status',
-                'required' => true,
-            ]);
+        ;
     }
 
     protected function configureShowFields(ShowMapper $showMapper): void
     {
         $showMapper
             ->add('id')
-            ->add('info')
-            ->add('status');
+            ->add('rawData')
+            ->add('status')
+            ->add('info');
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $datagridMapper
-            ->add('info')
-            ->add('status');
+            ->add('rawData')
+            ->add('status')
+            ->add('info');
     }
 }

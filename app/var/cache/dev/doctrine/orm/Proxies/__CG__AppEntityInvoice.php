@@ -24,6 +24,7 @@ class Invoice extends \App\Entity\Invoice implements \Doctrine\ORM\Proxy\Interna
     private const LAZY_OBJECT_PROPERTY_SCOPES = [
         "\0".parent::class."\0".'amount' => [parent::class, 'amount', null],
         "\0".parent::class."\0".'callbacks' => [parent::class, 'callbacks', null],
+        "\0".parent::class."\0".'currency' => [parent::class, 'currency', null],
         "\0".parent::class."\0".'id' => [parent::class, 'id', null],
         "\0".parent::class."\0".'qrCode' => [parent::class, 'qrCode', null],
         "\0".parent::class."\0".'requestData' => [parent::class, 'requestData', null],
@@ -31,6 +32,7 @@ class Invoice extends \App\Entity\Invoice implements \Doctrine\ORM\Proxy\Interna
         "\0".parent::class."\0".'status' => [parent::class, 'status', null],
         'amount' => [parent::class, 'amount', null],
         'callbacks' => [parent::class, 'callbacks', null],
+        'currency' => [parent::class, 'currency', null],
         'id' => [parent::class, 'id', null],
         'qrCode' => [parent::class, 'qrCode', null],
         'requestData' => [parent::class, 'requestData', null],
